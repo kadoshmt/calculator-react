@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
@@ -15,6 +15,7 @@ const InputKey = ({ character, styles="", func }) => (
 )
 
 export default function App() {
+  const [digit, setDigit] = useState('0')
   const [display, setDisplay] = useState('0')
   const [preValue, setPreValue] = useState('')
   const [nextValue, setNextValue] = useState('')
@@ -22,6 +23,7 @@ export default function App() {
   const [history, setHistory] = []
   
   function executeOperation(preValue, nextValue){    
+    console.log(preValue ,nextValue, operator, display)
     switch (operator) {
       case '+': return preValue + nextValue
       case '-': return preValue - nextValue
@@ -40,8 +42,8 @@ export default function App() {
     setPreValue('')
   }
 
-  function handlerDigit( value ){    
-    display === '0' ? setDisplay (value) : setDisplay(`${display}${value}`)
+  function handlerDigit( value ){          
+    setDigit(value)    
   }
 
   function handlerOperator(operator){    
@@ -64,20 +66,24 @@ export default function App() {
       setDisplay('ZERO ERR')      
       console.log('divisão por zero')
       return
-    }
-    
-    // Setei o valor no state..
+    }    
+
     nextValue === '' ? setNextValue(Number.parseInt(display)) : setNextValue(Number.parseInt(display))
 
-    // Cadê o valor? porque não está no state?
-    console.log(preValue ,nextValue, operator, display)
-
-    // precisei passar as variáveis por parâmetro, pq a nextValue ainda não está acessível no state
-    const result = executeOperation(preValue, Number.parseInt(display))      
-    
-    console.log(result)
-    setDisplay(result + '')
   }
+
+  useEffect(() => {
+    const result = executeOperation(preValue, nextValue)
+    setDisplay(result + '')
+  }, [nextValue])
+
+  useEffect(() => {        
+    display.length <= 8 
+      ? display === '0' // In the first time, display will be always 0...
+        ? setDisplay (digit)  // so, change the value for the clicked value
+        : setDisplay(`${display}${digit}`) // after that, concat the value with the previous
+      : console.log('Do nothing')
+  }, [digit])
   
   return (   
     <div className="container">       
