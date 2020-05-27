@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-const DisplayContainer = ({display='0'}) => (  
+const DisplayContainer = ({display}) => (  
     <div className="display-container">
-      {display}
+      {
+        display.length < 8 ?
+          display :
+          display.slice(0, 5).concat('...')
+      }
     </div>
   )
 
@@ -14,24 +18,22 @@ const InputKey = ({ character, styles="", func }) => (
   </button>
 )
 
-export default function App() {  
+export default function App() {
+  const [digit, setDigit] = useState('0')
   const [display, setDisplay] = useState('0')
   const [preValue, setPreValue] = useState('')
   const [nextValue, setNextValue] = useState('')
   const [operator, setOperator] = useState('')
-  let firstPosition = true;  
+  const [history, setHistory] = []
   
-  function consoleLog(msg){
-    console.log(`${msg} || Display: ${display}, Operator: ${operator}, Prev: ${preValue}, Next: ${nextValue}, first: ${firstPosition}`)
-  }
-  function executeOperation(preValue, nextValue){        
+  function executeOperation(preValue, nextValue){    
+    console.log(preValue ,nextValue, operator, display)
     switch (operator) {
       case '+': return preValue + nextValue
       case '-': return preValue - nextValue
-      case '/': return preValue / nextValue    
-      default: return 0;  
+      case '/': return preValue / nextValue      
     }
-    
+    return 0
   }   
   
   function clear(){
@@ -42,27 +44,21 @@ export default function App() {
     setNextValue('')
     setOperator('')
     setPreValue('')
-    firstPosition = true
   }
 
   function handlerDigit( value ){          
-    //setDigit(value)        
-    display.length < 8 
-      ? display === '0' // In the first time, display will be always 0...
-        ? setDisplay (value)  // so, change the value for the clicked value
-        : setDisplay(`${display}${value}`) // after that, concat the value with the previous
-      : console.log('Do nothing')
-    consoleLog('handlerDigit')
+    const trimZero = display === '0' ? '' : display
+    setDisplay(`${trimZero}${value}`)
   }
 
   function handlerOperator(operator){    
-    consoleLog('handlerOperator')
-    setOperator(operator)        
-    //setDisplay('0') // trocar pelo valor do display antes de clicar no sinal
+    setOperator(operator)    
+    preValue === '' ? setPreValue(Number.parseInt(display)) : setNextValue(Number.parseInt(display))
   }
 
-  function handlerEqual(){
-    consoleLog('handlerEqual')
+  function handlerEqual(){   
+    console.log(preValue ,nextValue, operator, display)
+
     // If the user press equal without inform any number
     if(preValue === '' && nextValue === '') {
       console.log('valores zerados')      
@@ -80,39 +76,10 @@ export default function App() {
 
   }
 
-  useEffect(() => {    
-    consoleLog('useEffect nextValue')
-    if(operator !== '') {
-      const result = executeOperation(preValue, nextValue)
-      setPreValue(result)
-      setDisplay(result + '')   
-      } 
-  }, [nextValue])
-
   useEffect(() => {
-    consoleLog('useEffect operator')
-    if(operator !== '') {
-      console.log('setou preValue')
-      if (firstPosition ) {
-        setPreValue(Number.parseInt(display))
-        firstPosition = false
-      } else {
-        setNextValue(Number.parseInt(display))
-      }
-      consoleLog('useEffect operator inside if')
-      //setDisplay('0')
-    }
-  }, [operator])
-
-  /*
-  useEffect(() => {        
-    display.length <= 8 
-      ? display === '0' // In the first time, display will be always 0...
-        ? setDisplay (digit)  // so, change the value for the clicked value
-        : setDisplay(`${display}${digit}`) // after that, concat the value with the previous
-      : console.log('Do nothing')
-  }, [digit])
-  */
+    const result = executeOperation(preValue, nextValue)
+    setDisplay(result + '')
+  }, [nextValue])
   
   return (   
     <div className="container">       
