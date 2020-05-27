@@ -47,13 +47,13 @@ export default function App() {
   }
 
   function handlerDigit( value ){          
-    setDigit(value)    
+    const trimZero = display === '0' ? '' : display
+    setDisplay(`${trimZero}${value}`)
   }
 
   function handlerOperator(operator){    
     setOperator(operator)    
     preValue === '' ? setPreValue(Number.parseInt(display)) : setNextValue(Number.parseInt(display))
-    setDisplay('0')    
   }
 
   function handlerEqual(){   
