@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
@@ -19,72 +19,60 @@ const InputKey = ({ character, styles="", func }) => (
 )
 
 export default function App() {
-  const [digit, setDigit] = useState('0')
-  const [display, setDisplay] = useState('0')
-  const [preValue, setPreValue] = useState('')
-  const [nextValue, setNextValue] = useState('')
-  const [operator, setOperator] = useState('')
-  const [history, setHistory] = []
-  
-  function executeOperation(preValue, nextValue){    
-    console.log(preValue ,nextValue, operator, display)
-    switch (operator) {
-      case '+': return preValue + nextValue
-      case '-': return preValue - nextValue
-      case '/': return preValue / nextValue      
-    }
-    return 0
-  }   
+  const [state, setState] = useState({
+    display: '0',
+    prev: '0',
+  })
   
   function clear(){
-    setNextValue('')
+    setState(state => ({
+      ...state,
+      display: '0',
+    }))
   }
 
   function clearAll(){
-    setNextValue('')
-    setOperator('')
-    setPreValue('')
+    setState(state => ({
+      ...state,
+      display: '0',
+      prev: '0',
+    }))
   }
 
   function handlerDigit( value ){          
-    const trimZero = display === '0' ? '' : display
-    setDisplay(`${trimZero}${value}`)
+    const trimZero = state.display === '0' ? '' : state.display
+    setState(state => ({
+      ...state,
+      display: `${trimZero}${value}`,
+    }))
   }
 
-  function handlerOperator(operator){    
-    setOperator(operator)    
-    preValue === '' ? setPreValue(Number.parseInt(display)) : setNextValue(Number.parseInt(display))
-  }
-
-  function handlerEqual(){   
-    console.log(preValue ,nextValue, operator, display)
-
-    // If the user press equal without inform any number
-    if(preValue === '' && nextValue === '') {
-      console.log('valores zerados')      
-      return
+  function handlerOperator(operator){
+    switch (operator) {
+      case '+':
+        setState(state => ({
+          ...state,
+          display: '0',
+          prev: String(Number(state.prev) + Number(state.display)),
+        }))
+        return
+      case '=':
+        setState(state => ({
+          ...state,
+          display: state.prev,
+          prev: '0',
+        }))
+        return
+      default:
+        return
     }
-
-    // If the calc is a division by zero
-    if(operator === '/' && display === '0'){
-      setDisplay('ZERO ERR')      
-      console.log('divisão por zero')
-      return
-    }    
-
-    nextValue === '' ? setNextValue(Number.parseInt(display)) : setNextValue(Number.parseInt(display))
-
   }
 
-  useEffect(() => {
-    const result = executeOperation(preValue, nextValue)
-    setDisplay(result + '')
-  }, [nextValue])
   
   return (   
     <div className="container">       
       <div className="calculator">
-        <DisplayContainer display={display} />
+        <DisplayContainer display={state.display} />
         <div className="keypad">
           <InputKey character="7" styles="light-gray" func={handlerDigit} />
           <InputKey character="8" styles="light-gray" func={handlerDigit} />
@@ -101,7 +89,7 @@ export default function App() {
           <InputKey character="0" styles="light-gray" func={handlerDigit} />
           <InputKey character="C" styles="light-gray" func={clear}/>
           <InputKey character="AC" styles="light-gray" func={clearAll}/>
-          <InputKey character="=" styles="orange" func={handlerEqual}/>
+          <InputKey character="=" styles="orange" func={handlerOperator}/>
         </div>
       </div>      
     </div>
