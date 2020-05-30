@@ -3,7 +3,7 @@
 
 This is a challenge #3 from [app-ideas @florinpop17](https://github.com/florinpop17/app-ideas/blob/master/Projects/1-Beginner/Calculator-App.md)
 
-<img src="https://user-images.githubusercontent.com/989544/82838189-6af75380-9e99-11ea-8887-5a3605d430d5.png" width="500" />
+<img src="https://user-images.githubusercontent.com/989544/83338185-c5c0ee80-a28f-11ea-9d73-a59a5981f061.png" width="400" />
 
 Calculators are not only one of the most useful tools available, but they are also a great way to understand UI and event processing in an application. In this problem you will create a calculator that supports basic arithmetic calculations on integers.
 
