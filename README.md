@@ -5,7 +5,14 @@ This is a challenge #3 from [app-ideas @florinpop17](https://github.com/florinpo
 
 <img src="https://user-images.githubusercontent.com/989544/83338185-c5c0ee80-a28f-11ea-9d73-a59a5981f061.png" width="400" />
 
-Calculators are not only one of the most useful tools available, but they are also a great way to understand UI and event processing in an application. In this problem you will create a calculator that supports basic arithmetic calculations on integers.
+Calculators are not only one of the most useful tools available, but they are
+also a great way to understand UI and event processing in an application. In
+this problem you will create a calculator that supports basic arithmetic
+calculations on integers. 
+
+The styling is up to you so use your imagination and get creative! You might
+also find it worth your time to experiment with the calculator app on your
+mobile device to better understand basic functionality and edge cases.
 
 ### Constraints
 
