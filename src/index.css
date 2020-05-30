@@ -33,7 +33,7 @@ body {
   height: 100%;
   background: white;  
   display: flex;
-  flex-direction: column;
+  flex-direction: column;  
 }
 
 .display-container{
@@ -48,7 +48,7 @@ body {
 
 .keypad{
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap;  
 }
 
 .input-key{
@@ -64,6 +64,10 @@ body {
 
 .double-key{
   width: 160px;
+}
+
+.triple-key {
+  width: 240px;
 }
 
 .input-key:hover{
@@ -84,4 +88,12 @@ body {
 
 .orange:hover {
   background:  linear-gradient(to bottom, rgb(214, 130, 11) 0%, rgb(209, 107, 24) 100%);
+}
+
+.consoleLog {
+  padding: 5px;
+  text-align: center;
+  margin-top: 15px;
+  background-color: #eee;
+  display: block;
 }
